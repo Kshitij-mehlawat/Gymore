@@ -8,8 +8,9 @@ from flask import Flask, jsonify, request, send_from_directory, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, static_folder="static")
-app.secret_key = os.environ.get("SECRET_KEY", "dev")
+app = Flask(__name__, static_folder="static", static_url_path="")
+app.secret_key = os.environ.get("SECRET_KEY", "gymore_secret_key_123")
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads", "verification_documents")
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
