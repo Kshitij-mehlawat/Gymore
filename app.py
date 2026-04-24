@@ -83,6 +83,11 @@ def connect_db():
         raise RuntimeError("Set DATABASE_URL first to connect with MySQL.")
 
     parsed = urlparse(DATABASE_URL)
+    
+    # Handle SSL for cloud providers like Aiven
+    ssl_config = None
+    if "ssl-mode" in parsed.query or "ssl" in parsed.query:
+        ssl_config = {"ssl": {}}  # Basic SSL enabled
 
     return pymysql.connect(
         host=parsed.hostname or "127.0.0.1",
@@ -92,6 +97,7 @@ def connect_db():
         database=parsed.path.lstrip("/"),
         charset="utf8mb4",
         cursorclass=pymysql.cursors.DictCursor,
+        ssl=ssl_config
     )
 
 
